@@ -1,6 +1,6 @@
 {
     "addPath": "",
-    "cameraPara": "data/camera_para.dat",
+    "cameraPara": "brave-leon/data/camera_para.dat",
     "container": {
       "create": true,
       "containerName": "",
