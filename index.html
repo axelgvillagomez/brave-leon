@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>BRAVE LEON — AR Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=1" />
+    <link rel="stylesheet" href="css/nft-style.css" />
+    <style>
+        body { background: #080808; margin: 0; }
+
+        /* Botón marcador — esquina inferior */
+        a.ui.marker {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(8,8,8,0.9);
+            color: #C9A96E;
+            border: 1px solid #C9A96E;
+            padding: 9px 22px;
+            border-radius: 2px;
+            font-family: 'Helvetica Neue', Helvetica, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            text-decoration: none;
+            z-index: 9999;
+            white-space: nowrap;
+        }
+        a.ui.marker:active { background: #C9A96E; color: #080808; }
+    </style>
+</head>
+<body>
+
+    <!-- Toca para ver la imagen marcador (frente de la tarjeta) -->
+    <a href="brave_leon_card.jpg" class="ui marker" target="_blank">
+        Ver imagen marcador
+    </a>
+
+    <!-- Video del portafolio — sin audio (muted), loop, autoplay -->
+    <video loop autoplay muted webkit-playsinline playsinline
+           crossorigin="anonymous" id="arvideo">
+        <source src="portfolio.mp4" type="video/mp4" />
+    </video>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three":         "./js/three.module.min.js",
+            "arnft-threejs": "./js/ARnftThreejs.mjs",
+            "arnft":         "./js/ARnft.mjs"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from "three";
+        import arnft from "arnft";
+        const { ARnft } = arnft;
+        import ARnftThreejs from "arnft-threejs";
+        const { SceneRendererTJS, NFTaddTJS } = ARnftThreejs;
+
+        // Dimensiones del marcador: brave_leon_card.jpg = 1063 × 591 px
+        const W = 1063, H = 591;
+
+        // Nombre del repositorio de GitHub Pages
+        const REPO = "";
+
+        ARnft.init(
+            W, H,
+            [["nft/brave_leon_card"]],
+            [["brave_leon_card"]],
+            "config.json",
+            false  // sin panel de stats
+        )
+        .then((nft) => {
+            document.addEventListener("containerEvent", (ev) => {
+                const canvas = document.getElementById("canvas");
+
+                const cfg = {
+                    renderer: {
+                        alpha: true, antialias: true, context: null,
+                        precision: "mediump", premultipliedAlpha: true,
+                        stencil: true, depth: true, logarithmicDepthBuffer: true,
+                    },
+                    camera: {
+                        fov: (0.8 * 180) / Math.PI,
+                        ratio: W / H,
+                        near: 0.01, far: 1000,
+                    },
+                };
+
+                const scene = new SceneRendererTJS(cfg, canvas, nft.uuid, true);
+                scene.initRenderer();
+
+                const nftObj = new NFTaddTJS(nft.uuid);
+
+                // Relación de aspecto del video 16:9
+                const imgConfig = { w: 1, h: 9 / 16, ws: 1, hs: 1 };
+
+                // Superponer video sobre el marcador — escala 220
+                nftObj.addVideo("arvideo", "brave_leon_card", 220, imgConfig, false);
+
+                const tick = () => {
+                    scene.draw();
+                    requestAnimationFrame(tick);
+                };
+                tick();
+            });
+        })
+        .catch(console.error);
+    </script>
+</body>
+</html>
