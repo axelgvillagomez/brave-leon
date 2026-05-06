@@ -61,7 +61,7 @@
             let height = window.innerHeight;
 
             // Initialize ARnft with the brave_leon_card marker
-            ARnft.init(640, 480, [["nft/brave_leon_card"]], [["brave_leon_card"]], "config.json", false)
+            ARnft.init(640, 480, [["nft/axel"]], [["axel"]], "config.json", false)
                 .then((nft) => {
                     // Create video texture
                     let video = document.getElementById("arvideo");
@@ -118,7 +118,7 @@
 
                         let nftAddTJS = new NFTaddTJS(nft.uuid);
                         // Add the video mesh to the marker
-                        nftAddTJS.add(videoMesh, "brave_leon_card", false);
+                        nftAddTJS.add(videoMesh, "axel", false);
 
                         const tick = () => {
                             sceneThreejs.draw();
