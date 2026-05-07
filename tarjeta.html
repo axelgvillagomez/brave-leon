@@ -21,8 +21,7 @@ body{
   text-align:center;margin-top:-36px;
 }
 
-/* ── Medidas reales: 9x5 cm a 300dpi = 1063x591px ──
-   Se muestra al 50% en pantalla: 531x295px            */
+/* ── 9x5 cm a 96dpi ≈ 340x189px — mostrado a ~1.5x en pantalla: 531x295 */
 .card{
   width:531px;height:295px;
   border-radius:4px;overflow:hidden;
@@ -31,44 +30,59 @@ body{
 }
 
 /* ══ FRENTE ══════════════════════════════════════ */
-.front{background:#080808}
-.front img.bg{
+.front{
+  background:#080808;
+  display:flex;align-items:stretch;
+}
+
+/* Patrón SVG generado inline — circuito + polígonos irregulares */
+.front .marker-bg{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;display:block;
 }
-.front .info h1 {
-  font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-  font-size: 32px;
-  letter-spacing: 0.1em;
-  margin-bottom: 4px;
-  color: #C9A96E;
+
+/* Overlay con datos personales */
+.front .overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:20px 24px;
+  background:linear-gradient(to top, rgba(8,8,8,0.78) 50%, transparent 100%);
 }
-.front .info h2 {
-  font-size: 14px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  opacity: 0.9;
+.front .name{
+  font-family:'Bebas Neue','Arial Black',sans-serif;
+  font-size:30px;letter-spacing:0.1em;color:#C9A96E;line-height:1;
 }
-.front .info p {
-  font-size: 11px;
-  line-height: 1.6;
-  opacity: 0.85;
-  letter-spacing: 0.05em;
+.front .role{
+  font-size:8.5px;letter-spacing:0.28em;text-transform:uppercase;
+  color:#ffffff;opacity:.7;margin-top:4px;
+}
+.front .contacts{
+  margin-top:10px;display:flex;flex-direction:column;gap:2px;
+}
+.front .contacts span{
+  font-size:7px;letter-spacing:0.12em;color:#ffffff;opacity:.55;
+}
+.front .contacts b{color:#C9A96E;opacity:1;margin-right:4px;}
+
+/* Logo esquina */
+.front .logo{
+  position:absolute;top:14px;right:16px;
+  font-family:'Bebas Neue','Arial Black',sans-serif;
+  font-size:14px;letter-spacing:0.14em;color:#C9A96E;
+  line-height:1.1;text-align:right;
+}
+.front .logo small{
+  display:block;font-family:'Inter',sans-serif;
+  font-size:5.5px;letter-spacing:0.22em;color:#fff;opacity:.45;
 }
 
 /* ══ REVERSO ═════════════════════════════════════ */
 .back{background:#F5F0E6;display:flex;align-items:stretch}
-
-.back .bar-r{
-  width:5px;background:#080808;flex-shrink:0;align-self:stretch;
-}
+.back .bar-l{width:5px;background:#C9A96E;flex-shrink:0;}
 .back .inner{
   flex:1;display:flex;align-items:center;
   padding:22px 26px 22px 22px;gap:22px;
 }
-
-/* QR */
 .qr-wrap{
   flex-shrink:0;display:flex;flex-direction:column;
   align-items:center;gap:6px;
@@ -78,26 +92,14 @@ body{
   border:2px solid #080808;border-radius:2px;
   image-rendering:pixelated;
 }
-.qr-lbl{
-  font-size:7px;letter-spacing:0.18em;text-transform:uppercase;
-  color:#080808;opacity:.4;
-}
-
-/* Instrucciones */
-.inst{
-  flex:1;border-left:1px solid rgba(8,8,8,.12);
-  padding-left:20px;
-}
+.qr-lbl{font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:#080808;opacity:.4;}
+.inst{flex:1;border-left:1px solid rgba(8,8,8,.12);padding-left:20px;}
 .back-brand{
   font-family:'Bebas Neue','Arial Black',sans-serif;
-  font-size:20px;letter-spacing:0.1em;color:#080808;
-  margin-bottom:10px;
+  font-size:20px;letter-spacing:0.1em;color:#080808;margin-bottom:10px;
 }
 .steps{list-style:none;display:flex;flex-direction:column;gap:6px}
-.steps li{
-  display:flex;align-items:flex-start;gap:7px;
-  font-size:8.5px;line-height:1.4;color:#080808;opacity:.72;
-}
+.steps li{display:flex;align-items:flex-start;gap:7px;font-size:8.5px;line-height:1.4;color:#080808;opacity:.72;}
 .steps li .n{
   flex-shrink:0;width:13px;height:13px;background:#080808;color:#F5F0E6;
   border-radius:50%;display:flex;align-items:center;justify-content:center;
@@ -108,11 +110,7 @@ body{
   font-family:'Bebas Neue','Arial Black',sans-serif;
   font-size:9px;letter-spacing:0.14em;color:#080808;opacity:.38;
 }
-
-/* ── Barra lateral izquierda reverso ── */
-.back .bar-l{
-  width:5px;background:#C9A96E;flex-shrink:0;
-}
+.back .bar-r{width:5px;background:#080808;flex-shrink:0;}
 
 @media print{
   body{background:white;padding:20px;gap:20px}
@@ -123,11 +121,119 @@ body{
 </head>
 <body>
 
-<div class="label">FRENTE — imprimir en negro · es el marcador AR</div>
+<div class="label">FRENTE — marcador AR · imprimir en negro</div>
 
 <!-- ══ FRENTE ══════════════════════════════════════════ -->
 <div class="card front">
-  <img class="bg" src="brave_leon_card.jpg" alt="Marker Background">
+
+  <!-- Patrón detectable generado en SVG -->
+  <svg class="marker-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 531 295" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="grid" width="18" height="18" patternUnits="userSpaceOnUse">
+        <path d="M18 0L0 0 0 18" fill="none" stroke="#1a1a1a" stroke-width="0.4"/>
+      </pattern>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Base oscura -->
+    <rect width="531" height="295" fill="#080808"/>
+    <!-- Grid sutil -->
+    <rect width="531" height="295" fill="url(#grid)"/>
+
+    <!-- Polígonos irregulares gold/dark -->
+    <polygon points="0,0 160,0 90,80 0,50" fill="#C9A96E" opacity="0.18"/>
+    <polygon points="531,0 350,0 420,110 531,70" fill="#C9A96E" opacity="0.14"/>
+    <polygon points="0,295 120,295 60,200" fill="#C9A96E" opacity="0.12"/>
+    <polygon points="531,295 390,295 460,195 531,230" fill="#C9A96E" opacity="0.1"/>
+    <polygon points="200,0 310,0 280,60 170,55" fill="#1c1c1c" opacity="0.9"/>
+    <polygon points="80,120 160,80 200,150 110,170" fill="#1a1a1a" opacity="0.8"/>
+    <polygon points="330,90 420,60 450,140 370,160" fill="#1b1b1b" opacity="0.8"/>
+    <polygon points="220,180 300,150 340,230 250,240" fill="#151515" opacity="0.85"/>
+
+    <!-- Líneas de circuito — trazos dorados -->
+    <g stroke="#C9A96E" stroke-width="0.8" fill="none" filter="url(#glow)" opacity="0.6">
+      <polyline points="0,60 40,60 40,90 100,90"/>
+      <polyline points="100,90 100,130 160,130 160,160"/>
+      <circle cx="40" cy="60" r="2.5" fill="#C9A96E"/>
+      <circle cx="100" cy="90" r="2.5" fill="#C9A96E"/>
+      <circle cx="160" cy="160" r="2.5" fill="#C9A96E"/>
+
+      <polyline points="531,100 490,100 490,70 430,70"/>
+      <polyline points="430,70 430,40 370,40"/>
+      <circle cx="490" cy="100" r="2.5" fill="#C9A96E"/>
+      <circle cx="430" cy="70" r="2.5" fill="#C9A96E"/>
+      <circle cx="370" cy="40" r="2.5" fill="#C9A96E"/>
+
+      <polyline points="0,220 50,220 50,250 130,250 130,270"/>
+      <circle cx="50" cy="220" r="2.5" fill="#C9A96E"/>
+      <circle cx="130" cy="250" r="2.5" fill="#C9A96E"/>
+
+      <polyline points="531,200 480,200 480,230 400,230 400,260 350,260"/>
+      <circle cx="480" cy="200" r="2.5" fill="#C9A96E"/>
+      <circle cx="400" cy="230" r="2.5" fill="#C9A96E"/>
+    </g>
+
+    <!-- Nodos aleatorios para riqueza de features -->
+    <g fill="none" stroke="#C9A96E" stroke-width="0.7" opacity="0.4">
+      <rect x="200" y="30" width="18" height="18" rx="1"/>
+      <rect x="290" y="50" width="12" height="12" rx="1"/>
+      <rect x="155" y="200" width="20" height="20" rx="1"/>
+      <rect x="360" y="170" width="15" height="15" rx="1"/>
+      <rect x="250" y="240" width="22" height="10" rx="1"/>
+      <line x1="218" y1="48" x2="218" y2="80"/>
+      <line x1="296" y1="62" x2="296" y2="100"/>
+      <line x1="165" y1="220" x2="200" y2="220"/>
+      <line x1="367" y1="177" x2="367" y2="210"/>
+    </g>
+
+    <!-- Puntos dispersos — alta variación local -->
+    <g fill="#C9A96E" opacity="0.35">
+      <circle cx="75" cy="45" r="1.5"/>  <circle cx="110" cy="30" r="1"/>
+      <circle cx="190" cy="70" r="1.5"/> <circle cx="260" cy="20" r="1.2"/>
+      <circle cx="390" cy="55" r="1.5"/> <circle cx="450" cy="30" r="1"/>
+      <circle cx="500" cy="130" r="1.5"/><circle cx="480" cy="160" r="1.2"/>
+      <circle cx="55" cy="165" r="1.5"/> <circle cx="30" cy="200" r="1.2"/>
+      <circle cx="170" cy="240" r="1.5"/><circle cx="120" cy="270" r="1"/>
+      <circle cx="310" cy="270" r="1.5"/><circle cx="420" cy="250" r="1.2"/>
+      <circle cx="500" cy="260" r="1.5"/><circle cx="460" cy="285" r="1"/>
+    </g>
+
+    <!-- Marcadores de esquina AR (ayudan al tracker) -->
+    <g stroke="#C9A96E" stroke-width="1.5" fill="none" opacity="0.8">
+      <!-- sup izq -->
+      <polyline points="8,24 8,8 24,8"/>
+      <!-- sup der -->
+      <polyline points="507,8 523,8 523,24"/>
+      <!-- inf izq -->
+      <polyline points="8,271 8,287 24,287"/>
+      <!-- inf der -->
+      <polyline points="507,287 523,287 523,271"/>
+    </g>
+
+    <!-- Cruz central — referencia de tracking -->
+    <g stroke="#C9A96E" stroke-width="0.6" opacity="0.25">
+      <circle cx="265" cy="147" r="40"/>
+      <circle cx="265" cy="147" r="20"/>
+      <line x1="225" y1="147" x2="305" y2="147"/>
+      <line x1="265" y1="107" x2="265" y2="187"/>
+    </g>
+  </svg>
+
+  <!-- Datos personales en overlay -->
+  <div class="overlay">
+    <div class="logo">BRAVE<br>LEON<small>CREATIVE STUDIO</small></div>
+    <div class="name">AXEL G. VILLAGOMEZ</div>
+    <div class="role">Diseñador Gráfico · Motion · XR</div>
+    <div class="contacts">
+      <span><b>EMAIL</b>axel@braveleon.studio</span>
+      <span><b>TEL</b>+52 444 000 0000</span>
+      <span><b>WEB</b>braveleon.studio</span>
+      <span><b>GITHUB</b>github.com/axgv.</span>
+    </div>
+  </div>
 </div>
 
 <div class="label">REVERSO — QR + instrucciones</div>
@@ -138,7 +244,7 @@ body{
   <div class="inner">
 
     <div class="qr-wrap">
-      <img src="data:image/png;base64,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" alt="QR BRAVE LEON AR"/>
+      <img src="qr_brave_leon.png" alt="QR BRAVE LEON AR"/>
       <div class="qr-lbl">App AR</div>
     </div>
 
